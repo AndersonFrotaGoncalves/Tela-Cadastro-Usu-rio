@@ -1,63 +1,63 @@
-# 🧾 Tela de Cadastro de Usuário – Full Stack
+# Cadastro de Utilizadores
 
-[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/AndersonGFrota/Tela-Cadastro-Usu-rio/blob/main/LICENSE)
-[![Author](https://img.shields.io/badge/Autor-Anderson%20Frota-lightgrey)](https://www.linkedin.com/in/andersongfrota)
+Aplicação full stack de cadastro de utilizadores: frontend em **React** (Vite) e **API REST serverless** em Netlify Functions, com os dados guardados no **Netlify Blobs**.
 
-## 📄 Sobre o projeto
+**Demonstração:** _(link do Netlify)_
 
-A **Tela de Cadastro de Usuário** é uma aplicação fullstack desenvolvida durante o curso **DevClub**, com objetivo de aplicar conceitos de front-end, back-end e integração com banco de dados em um sistema completo de cadastro e listagem de usuários.
+![Ecrã principal](docs/cadastro.png)
 
-O projeto conta com:
+## Funcionalidades
 
-- Criação de API com **Node.js** e **Express**
-- Integração com banco de dados **MongoDB**
-- Interface com **ReactJS** (web) e **React Native** (mobile)
-- Manipulação de estado e refs com **React Hooks**
-- Comunicação com API (consumo, criação e remoção de usuários)
+- Registar, editar e apagar utilizadores (com confirmação antes de apagar)
+- Pesquisa por nome ou e-mail
+- Validação no formulário e no servidor, com mensagens por campo
+- E-mail único (sem distinguir maiúsculas e minúsculas)
+- Estados de carregamento, lista vazia e erro de ligação
+- Layout responsivo e acessível (navegação por teclado, `aria-*`)
+- Dados de demonstração repostos todos os dias por uma função agendada
 
----
+## API
 
-## ⚙️ Funcionalidades
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/api/usuarios?busca=texto` | Lista (mais recentes primeiro), com pesquisa opcional |
+| `POST` | `/api/usuarios` | Cria `{ nome, email, idade }` |
+| `PUT` | `/api/usuarios/:id` | Atualiza |
+| `DELETE` | `/api/usuarios/:id` | Apaga |
 
-- Cadastro de novos usuários  
-- Listagem de usuários cadastrados  
-- Remoção de usuários  
-- Integração completa com backend  
-- Consumo da API via axios/fetch  
-- Tratamento de CORS, rotas e dados  
+Erros devolvem `{ erro, campos }` com o código HTTP adequado (400, 404, 409).
 
----
+## Estrutura
 
-## 🧩 Tecnologias utilizadas
+```
+frontend/                  React + Vite
+  src/App.jsx              lista, pesquisa, edição, confirmação
+  src/Formulario.jsx       formulário com validação
+  src/api.js               cliente da API
+netlify/functions/
+  usuarios.mjs             API REST
+  repor-demo.mjs           função agendada (reposição diária)
+netlify/lib/usuarios.mjs   regras de negócio (testáveis sem Netlify)
+tests/api.test.mjs         testes da API (node:test)
+```
 
-### 🔹 Back-end:
-- Node.js  
-- Express  
-- MongoDB  
-- Prisma (Documentação)
+## Correr localmente
 
-### 🔹 Front-end:
-- HTML5 / CSS3 / JavaScript  
-- TypeScript  
-- ReactJS  
-- React Native  
+```bash
+npm install
+npm test                      # testes da API
+npm i -g netlify-cli
+netlify dev                   # frontend + API em http://localhost:8888
+```
 
----
+## Publicar no Netlify
 
-## 🖼️ Visual do projeto
+Ligar o repositório no Netlify. O `netlify.toml` já define o build (`npm run build`), a pasta publicada (`frontend/dist`) e as funções. O Netlify Blobs não precisa de configuração.
 
-### Layout Web  
-![Web](https://github.com/AndersonGFrota/Tela-Cadastro-Usu-rio/blob/main/Macbook-Air-localhost%20(1).png)
+## Histórico
 
-### Mockup  
-![Modelo](https://github.com/AndersonGFrota/Tela-Cadastro-Usu-rio/blob/main/Beige%20Brown%20Aesthetic%20Save%20The%20Date%20Editable%20Mockup%20Instagram%20Post%20(1).png)
+A primeira versão foi feita no curso DevClub com Express, Prisma e MongoDB. Esta versão 2 passou a API para serverless e reescreveu o frontend com validação, edição, pesquisa e testes.
 
----
+## Autor
 
-## 👨‍💻 Autor
-
-Desenvolvido por **Anderson Frota Gonçalves**  
-[LinkedIn](https://www.linkedin.com/in/andersongfrota)  
-[GitHub](https://github.com/AndersonGFrota)
-
----
+**Anderson Frota Gonçalves** · [Portfólio](https://andersonfrota.netlify.app) · [LinkedIn](https://www.linkedin.com/in/andersongfrota)

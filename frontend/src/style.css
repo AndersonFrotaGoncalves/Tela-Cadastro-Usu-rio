@@ -1,0 +1,107 @@
+:root {
+  --fundo: #eef1f5;
+  --superficie: #ffffff;
+  --tinta: #17213a;
+  --suave: #5b6680;
+  --linha: #d5dbe5;
+  --acento: #2f5bea;
+  --acento-escuro: #1f44c4;
+  --perigo: #c2362b;
+  --ok: #0e8a6a;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  color: var(--tinta);
+  background: var(--fundo);
+}
+
+* { box-sizing: border-box; margin: 0; }
+body { min-height: 100vh; line-height: 1.5; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--acento) 45%, transparent); outline-offset: 2px; }
+
+.pagina { max-width: 1120px; margin: 0 auto; padding: 48px 24px 32px; }
+
+.topo { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 32px; border-bottom: 2px solid var(--tinta); padding-bottom: 20px; }
+.topo h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.1; letter-spacing: -0.02em; }
+.topo p { color: var(--suave); margin-top: 8px; max-width: 56ch; }
+.contador { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.grelha { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 32px; align-items: start; }
+
+/* Formulário */
+.formulario { background: var(--superficie); border: 1px solid var(--linha); border-radius: 12px; padding: 24px; display: grid; gap: 18px; position: sticky; top: 24px; }
+.formulario h2 { font-size: 1.15rem; }
+.campo { display: grid; gap: 6px; }
+.campo span { font-size: 0.9rem; font-weight: 600; }
+.campo input { height: 44px; padding: 0 12px; border: 1px solid var(--linha); border-radius: 8px; background: #f8f9fb; transition: border-color .15s, background .15s; }
+.campo input:hover { border-color: #b3bccb; }
+.campo input:focus { outline: none; border-color: var(--acento); background: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--acento) 18%, transparent); }
+.campo-erro input { border-color: var(--perigo); background: #fff6f5; }
+.campo small { color: var(--perigo); font-size: 0.85rem; font-weight: 500; }
+.acoes-form { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn { height: 44px; padding: 0 18px; white-space: nowrap; border-radius: 8px; border: 1px solid transparent; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s; }
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn-primario { background: var(--acento); color: #fff; flex: 1; }
+.btn-primario:hover:not(:disabled) { background: var(--acento-escuro); }
+.btn-secundario { background: transparent; border-color: var(--linha); }
+.btn-secundario:hover:not(:disabled) { border-color: var(--tinta); }
+.btn-perigo { background: var(--perigo); color: #fff; }
+.btn-perigo:hover { background: #a42a20; }
+
+/* Lista */
+.pesquisa { position: relative; margin-bottom: 14px; }
+.pesquisa svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 18px; height: 18px; fill: none; stroke: var(--suave); stroke-width: 2; stroke-linecap: round; }
+.pesquisa input { width: 100%; height: 46px; padding: 0 14px 0 42px; border: 1px solid var(--linha); border-radius: 10px; background: var(--superficie); }
+.pesquisa input:focus { outline: none; border-color: var(--acento); }
+
+.tabela { list-style: none; padding: 0; background: var(--superficie); border: 1px solid var(--linha); border-radius: 12px; overflow: hidden; }
+.linha { display: grid; grid-template-columns: 40px minmax(0, 1fr) 76px 110px auto; align-items: center; gap: 16px; padding: 14px 16px; border-top: 1px solid var(--linha); }
+.linha:first-child { border-top: 0; }
+.linha-ativa { background: color-mix(in srgb, var(--acento) 7%, #fff); box-shadow: inset 3px 0 0 var(--acento); }
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 0.9rem; }
+.dados { display: grid; min-width: 0; }
+.dados strong, .dados span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dados span { color: var(--suave); font-size: 0.92rem; }
+.idade, .data { color: var(--suave); font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.acoes { display: flex; gap: 4px; }
+.icone { width: 38px; height: 38px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
+.icone svg { width: 18px; height: 18px; fill: none; stroke: var(--suave); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icone:hover { background: var(--fundo); }
+.icone:hover svg { stroke: var(--acento); }
+.icone-perigo:hover svg { stroke: var(--perigo); }
+
+.esqueleto { height: 69px; background: linear-gradient(90deg, #f3f5f8 25%, #e7ebf1 50%, #f3f5f8 75%) 0 0 / 200% 100%; animation: brilho 1.2s infinite linear; }
+@keyframes brilho { to { background-position: -200% 0; } }
+
+.vazio { background: var(--superficie); border: 1px dashed var(--linha); border-radius: 12px; padding: 40px 24px; text-align: center; display: grid; gap: 14px; justify-items: center; color: var(--suave); }
+
+.rodape { margin-top: 40px; color: var(--suave); font-size: 0.88rem; }
+.rodape a { color: var(--tinta); }
+
+/* Diálogo de confirmação */
+.dialogo { border: 0; border-radius: 12px; padding: 28px; max-width: 420px; width: calc(100% - 32px); margin: auto; color: var(--tinta); }
+.dialogo::backdrop { background: rgb(23 33 58 / .45); }
+.dialogo h2 { font-size: 1.2rem; margin-bottom: 8px; }
+.dialogo p { color: var(--suave); margin-bottom: 22px; }
+
+/* Aviso */
+.aviso { position: fixed; left: 50%; bottom: 24px; translate: -50% 0; padding: 12px 18px; border-radius: 10px; color: #fff; font-weight: 500; box-shadow: 0 8px 24px rgb(23 33 58 / .2); animation: entrar .2s ease-out; max-width: calc(100% - 32px); }
+.aviso-ok { background: var(--tinta); }
+.aviso-erro { background: var(--perigo); }
+@keyframes entrar { from { opacity: 0; translate: -50% 8px; } }
+
+@media (max-width: 860px) {
+  .grelha { grid-template-columns: minmax(0, 1fr); }
+  .formulario { position: static; }
+}
+@media (max-width: 560px) {
+  .pagina { padding-top: 28px; padding-inline: 16px; }
+  .topo { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .linha { grid-template-columns: 40px minmax(0, 1fr) auto; row-gap: 4px; }
+  .idade, .data { grid-column: 2; font-size: 0.85rem; }
+  .data { display: none; }
+  .acoes { grid-column: 3; grid-row: 1 / span 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
