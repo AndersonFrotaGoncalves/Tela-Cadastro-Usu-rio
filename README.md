@@ -2,7 +2,7 @@
 
 Aplicação full stack de cadastro de utilizadores: frontend em **React** (Vite) e **API REST serverless** em Netlify Functions, com os dados guardados no **Netlify Blobs**.
 
-**Demonstração:** _(link do Netlify)_
+**Demonstração:** [tela-cadastro-usuario.netlify.app](https://tela-cadastro-usuario.netlify.app)
 
 ![Ecrã principal](docs/cadastro.png)
 
