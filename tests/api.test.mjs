@@ -1,4 +1,4 @@
-// Testes da API com um armazenamento em memória: `npm test`
+// API tests with in-memory storage: `npm test`
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 
@@ -17,34 +17,34 @@ const pedir = async (metodo, caminho, corpo) => {
 
 beforeEach(() => memoria.clear());
 
-test("a primeira listagem traz os dados de demonstração", async () => {
+test("the first list returns the demo data", async () => {
   const r = await pedir("GET", "/api/usuarios");
   assert.equal(r.status, 200);
   assert.equal(r.dados.length, DEMO.length);
 });
 
-test("cria um utilizador válido e normaliza os dados", async () => {
+test("creates a valid user and normalizes the data", async () => {
   const r = await pedir("POST", "/api/usuarios", { nome: "  Ana   Silva ", email: "ANA@Email.com", idade: "30" });
   assert.equal(r.status, 201);
   assert.deepEqual([r.dados.nome, r.dados.email, r.dados.idade], ["Ana Silva", "ana@email.com", 30]);
   const l = await pedir("GET", "/api/usuarios");
-  assert.equal(l.dados[0].email, "ana@email.com"); // mais recente primeiro
+  assert.equal(l.dados[0].email, "ana@email.com"); // newest first
 });
 
-test("recusa dados inválidos com mensagens por campo", async () => {
+test("rejects invalid data with per-field messages", async () => {
   const r = await pedir("POST", "/api/usuarios", { nome: "A", email: "x@", idade: "200" });
   assert.equal(r.status, 400);
   assert.deepEqual(Object.keys(r.dados.campos).sort(), ["email", "idade", "nome"]);
 });
 
-test("recusa e-mail repetido, sem distinguir maiúsculas", async () => {
+test("rejects a duplicate email, case-insensitive", async () => {
   await pedir("POST", "/api/usuarios", { nome: "Ana", email: "ana@email.com", idade: 30 });
   const r = await pedir("POST", "/api/usuarios", { nome: "Outra Ana", email: "Ana@Email.com", idade: 31 });
   assert.equal(r.status, 409);
   assert.ok(r.dados.campos.email);
 });
 
-test("atualiza, mantendo o próprio e-mail permitido", async () => {
+test("updates, allowing the user to keep their own email", async () => {
   const c = await pedir("POST", "/api/usuarios", { nome: "Ana", email: "ana@email.com", idade: 30 });
   const r = await pedir("PUT", `/api/usuarios/${c.dados.id}`, { nome: "Ana Paula", email: "ana@email.com", idade: 31 });
   assert.equal(r.status, 200);
@@ -52,18 +52,18 @@ test("atualiza, mantendo o próprio e-mail permitido", async () => {
   assert.ok(r.dados.atualizadoEm);
 });
 
-test("apaga e devolve 404 para id inexistente", async () => {
+test("deletes and returns 404 for an unknown id", async () => {
   const c = await pedir("POST", "/api/usuarios", { nome: "Ana", email: "ana@email.com", idade: 30 });
   assert.equal((await pedir("DELETE", `/api/usuarios/${c.dados.id}`)).status, 204);
   assert.equal((await pedir("DELETE", `/api/usuarios/${c.dados.id}`)).status, 404);
 });
 
-test("pesquisa por nome ou e-mail", async () => {
-  const r = await pedir("GET", "/api/usuarios?busca=beatriz");
+test("searches by name or email", async () => {
+  const r = await pedir("GET", "/api/usuarios?busca=lucas");
   assert.equal(r.dados.length, 1);
 });
 
-test("respeita o limite de registos da demonstração", async () => {
+test("respects the demo user limit", async () => {
   memoria.set("lista", JSON.stringify(Array.from({ length: LIMITE }, (_, i) => ({ id: String(i), nome: "X", email: `u${i}@x.pt`, idade: 20, criadoEm: new Date().toISOString() }))));
   const r = await pedir("POST", "/api/usuarios", { nome: "Ana", email: "ana@email.com", idade: 30 });
   assert.equal(r.status, 409);

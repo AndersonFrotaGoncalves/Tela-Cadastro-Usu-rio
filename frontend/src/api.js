@@ -1,4 +1,4 @@
-// Cliente da API REST (/api/usuarios), servida pelas Netlify Functions.
+// REST API client (/api/usuarios), served by Netlify Functions.
 const BASE = "/api/usuarios";
 
 export class ErroApi extends Error {
@@ -14,11 +14,11 @@ async function pedir(caminho, opcoes = {}) {
   try {
     r = await fetch(BASE + caminho, { headers: { "content-type": "application/json" }, ...opcoes });
   } catch {
-    throw new ErroApi("Sem ligação ao servidor. Verifique a internet e tente outra vez.");
+    throw new ErroApi("Can't reach the server. Check your internet connection and try again.");
   }
   if (r.status === 204) return null;
   const dados = await r.json().catch(() => ({}));
-  if (!r.ok) throw new ErroApi(dados.erro || "Não foi possível concluir o pedido.", dados.campos, r.status);
+  if (!r.ok) throw new ErroApi(dados.erro || "The request could not be completed.", dados.campos, r.status);
   return dados;
 }
 

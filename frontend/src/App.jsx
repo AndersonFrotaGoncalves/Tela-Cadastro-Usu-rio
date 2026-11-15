@@ -3,8 +3,8 @@ import { api } from "./api.js";
 import Formulario from "./Formulario.jsx";
 
 const iniciais = (nome) => nome.split(" ").filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
-const dataCurta = (iso) => new Date(iso).toLocaleDateString("pt-PT", { day: "2-digit", month: "short", year: "numeric" });
-// Cor do avatar derivada do e-mail, para cada pessoa ter sempre a mesma.
+const dataCurta = (iso) => new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+// Avatar color derived from the email, so each person always gets the same one.
 const TONS = ["#2F5BEA", "#0E8A6A", "#B5541B", "#7A4CC2", "#B8306A", "#2E7C9E"];
 const tom = (txt) => TONS[[...txt].reduce((s, c) => s + c.charCodeAt(0), 0) % TONS.length];
 
@@ -35,7 +35,7 @@ export default function App() {
     }
   }, []);
 
-  // Pesquisa com um pequeno atraso para não pedir ao servidor a cada tecla.
+  // Search with a short delay so we don't call the server on every key press.
   useEffect(() => {
     const t = setTimeout(() => carregar(busca), busca ? 250 : 0);
     return () => clearTimeout(t);
@@ -52,11 +52,11 @@ export default function App() {
     try {
       if (emEdicao) {
         await api.atualizar(emEdicao.id, dados);
-        avisar(`${dados.nome.trim()} foi atualizado.`);
+        avisar(`${dados.nome.trim()} was updated.`);
         setEmEdicao(null);
       } else {
         await api.criar(dados);
-        avisar(`${dados.nome.trim()} foi registado.`);
+        avisar(`${dados.nome.trim()} was added.`);
       }
       await carregar(busca);
     } catch (e) {
@@ -71,7 +71,7 @@ export default function App() {
     try {
       await api.apagar(u.id);
       if (emEdicao?.id === u.id) setEmEdicao(null);
-      avisar(`${u.nome} foi apagado.`);
+      avisar(`${u.nome} was deleted.`);
       await carregar(busca);
     } catch (e) {
       avisar(e.message, "erro");
@@ -82,21 +82,21 @@ export default function App() {
     <div className="pagina">
       <header className="topo">
         <div>
-          <h1>Cadastro de utilizadores</h1>
-          <p>Registe, pesquise, edite e apague utilizadores. Os dados ficam guardados no servidor.</p>
+          <h1>User registry</h1>
+          <p>Add, search, edit and delete users. Data is saved on the server.</p>
         </div>
         <span className="contador" aria-live="polite">
-          {estado === "pronto" && (busca ? `${usuarios.length} resultado${usuarios.length === 1 ? "" : "s"}` : `${usuarios.length} registado${usuarios.length === 1 ? "" : "s"}`)}
+          {estado === "pronto" && (busca ? `${usuarios.length} result${usuarios.length === 1 ? "" : "s"}` : `${usuarios.length} user${usuarios.length === 1 ? "" : "s"}`)}
         </span>
       </header>
 
       <main className="grelha">
         <Formulario emEdicao={emEdicao} aoGravar={gravar} aoCancelar={() => setEmEdicao(null)} />
 
-        <section className="lista" aria-label="Utilizadores registados">
+        <section className="lista" aria-label="Registered users">
           <div className="pesquisa">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-            <input type="search" placeholder="Pesquisar por nome ou e-mail" value={busca} onChange={(e) => setBusca(e.target.value)} aria-label="Pesquisar utilizadores" />
+            <input type="search" placeholder="Search by name or email" value={busca} onChange={(e) => setBusca(e.target.value)} aria-label="Search users" />
           </div>
 
           {estado === "carregar" && (
@@ -108,14 +108,14 @@ export default function App() {
           {estado === "erro" && (
             <div className="vazio">
               <p>{erroLista}</p>
-              <button className="btn btn-secundario" onClick={() => { setEstado("carregar"); carregar(busca); }}>Tentar outra vez</button>
+              <button className="btn btn-secundario" onClick={() => { setEstado("carregar"); carregar(busca); }}>Try again</button>
             </div>
           )}
 
           {estado === "pronto" && usuarios.length === 0 && (
             <div className="vazio">
-              {busca ? <p>Nenhum utilizador corresponde a “{busca}”.</p> : <p>Ainda não há utilizadores. Registe o primeiro no formulário.</p>}
-              {busca && <button className="btn btn-secundario" onClick={() => setBusca("")}>Limpar pesquisa</button>}
+              {busca ? <p>No users match “{busca}”.</p> : <p>No users yet. Add the first one with the form.</p>}
+              {busca && <button className="btn btn-secundario" onClick={() => setBusca("")}>Clear search</button>}
             </div>
           )}
 
@@ -128,13 +128,13 @@ export default function App() {
                     <strong>{u.nome}</strong>
                     <span>{u.email}</span>
                   </div>
-                  <span className="idade">{u.idade} anos</span>
-                  <span className="data" title={`Registado a ${dataCurta(u.criadoEm)}`}>{dataCurta(u.criadoEm)}</span>
+                  <span className="idade">{u.idade} years</span>
+                  <span className="data" title={`Added on ${dataCurta(u.criadoEm)}`}>{dataCurta(u.criadoEm)}</span>
                   <div className="acoes">
-                    <button className="icone" onClick={() => { setEmEdicao(u); window.scrollTo({ top: 0, behavior: "smooth" }); }} aria-label={`Editar ${u.nome}`} title="Editar">
+                    <button className="icone" onClick={() => { setEmEdicao(u); window.scrollTo({ top: 0, behavior: "smooth" }); }} aria-label={`Edit ${u.nome}`} title="Edit">
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" /><path d="m13.5 6.5 4 4" /></svg>
                     </button>
-                    <button className="icone icone-perigo" onClick={() => setAApagar(u)} aria-label={`Apagar ${u.nome}`} title="Apagar">
+                    <button className="icone icone-perigo" onClick={() => setAApagar(u)} aria-label={`Delete ${u.nome}`} title="Delete">
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" /></svg>
                     </button>
                   </div>
@@ -146,19 +146,19 @@ export default function App() {
       </main>
 
       <footer className="rodape">
-        Demonstração pública: os dados de exemplo são repostos todos os dias. Feito por{" "}
+        Public demo: the sample data is reset every day. Built by{" "}
         <a href="https://andersonfrota.netlify.app" target="_blank" rel="noreferrer">Anderson Frota</a> ·{" "}
-        <a href="https://github.com/AndersonFrotaGoncalves/Tela-Cadastro-Usu-rio" target="_blank" rel="noreferrer">código no GitHub</a>
+        <a href="https://github.com/AndersonFrotaGoncalves/Tela-Cadastro-Usu-rio" target="_blank" rel="noreferrer">source on GitHub</a>
       </footer>
 
       <dialog ref={dialogo} className="dialogo" onClose={() => setAApagar(null)}>
         {aApagar && (
           <>
-            <h2>Apagar {aApagar.nome}?</h2>
-            <p>O registo de {aApagar.email} será removido. Esta ação não pode ser desfeita.</p>
+            <h2>Delete {aApagar.nome}?</h2>
+            <p>The user {aApagar.email} will be removed. This can't be undone.</p>
             <div className="acoes-form">
-              <button className="btn btn-perigo" onClick={confirmarApagar} autoFocus>Apagar</button>
-              <button className="btn btn-secundario" onClick={() => setAApagar(null)}>Cancelar</button>
+              <button className="btn btn-perigo" onClick={confirmarApagar} autoFocus>Delete</button>
+              <button className="btn btn-secundario" onClick={() => setAApagar(null)}>Cancel</button>
             </div>
           </>
         )}

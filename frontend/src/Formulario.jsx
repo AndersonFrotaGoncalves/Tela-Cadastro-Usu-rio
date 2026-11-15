@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 
 const VAZIO = { nome: "", email: "", idade: "" };
 
-// Mesmas regras do servidor, para dar retorno imediato antes de enviar.
+// Same rules as the server, for instant feedback before sending.
 export function validar({ nome, email, idade }) {
   const e = {};
-  if (nome.trim().length < 2) e.nome = "Escreva o nome (pelo menos 2 letras).";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) e.email = "Escreva um e-mail válido, por exemplo nome@email.com.";
+  if (nome.trim().length < 2) e.nome = "Enter a name (at least 2 letters).";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) e.email = "Enter a valid email, for example name@email.com.";
   const n = Number(idade);
-  if (!String(idade).trim() || !Number.isInteger(n) || n < 1 || n > 120) e.idade = "A idade tem de ser um número inteiro entre 1 e 120.";
+  if (!String(idade).trim() || !Number.isInteger(n) || n < 1 || n > 120) e.idade = "Age must be a whole number between 1 and 120.";
   return e;
 }
 
@@ -68,17 +68,17 @@ export default function Formulario({ emEdicao, aoGravar, aoCancelar }) {
 
   return (
     <form className="formulario" onSubmit={enviar} noValidate>
-      <h2>{emEdicao ? "Editar utilizador" : "Novo utilizador"}</h2>
-      {campo("nome", "Nome completo", { ref: primeiro, autoComplete: "name", maxLength: 60, placeholder: "Ex.: Ana Silva" })}
-      {campo("email", "E-mail", { type: "email", autoComplete: "email", maxLength: 100, placeholder: "nome@email.com" })}
-      {campo("idade", "Idade", { type: "number", inputMode: "numeric", min: 1, max: 120, placeholder: "Ex.: 30" })}
+      <h2>{emEdicao ? "Edit user" : "New user"}</h2>
+      {campo("nome", "Full name", { ref: primeiro, autoComplete: "name", maxLength: 60, placeholder: "e.g. Anna Smith" })}
+      {campo("email", "Email", { type: "email", autoComplete: "email", maxLength: 100, placeholder: "name@email.com" })}
+      {campo("idade", "Age", { type: "number", inputMode: "numeric", min: 1, max: 120, placeholder: "e.g. 30" })}
       <div className="acoes-form">
         <button className="btn btn-primario" disabled={aGravar}>
-          {aGravar ? "A gravar…" : emEdicao ? "Guardar alterações" : "Registar utilizador"}
+          {aGravar ? "Saving…" : emEdicao ? "Save changes" : "Add user"}
         </button>
         {emEdicao && (
           <button type="button" className="btn btn-secundario" onClick={aoCancelar} disabled={aGravar}>
-            Cancelar
+            Cancel
           </button>
         )}
       </div>

@@ -1,63 +1,63 @@
-# Cadastro de Utilizadores
+# User Registry
 
-Aplicação full stack de cadastro de utilizadores: frontend em **React** (Vite) e **API REST serverless** em Netlify Functions, com os dados guardados no **Netlify Blobs**.
+Full stack user registry app: **React** front end (Vite) and a **serverless REST API** on Netlify Functions, with data stored in **Netlify Blobs**.
 
-**Demonstração:** [tela-cadastro-usuario.netlify.app](https://tela-cadastro-usuario.netlify.app)
+**Live demo:** [tela-cadastro-usuario.netlify.app](https://tela-cadastro-usuario.netlify.app)
 
-![Ecrã principal](docs/cadastro.png)
+![Main screen](docs/cadastro.png)
 
-## Funcionalidades
+## Features
 
-- Registar, editar e apagar utilizadores (com confirmação antes de apagar)
-- Pesquisa por nome ou e-mail
-- Validação no formulário e no servidor, com mensagens por campo
-- E-mail único (sem distinguir maiúsculas e minúsculas)
-- Estados de carregamento, lista vazia e erro de ligação
-- Layout responsivo e acessível (navegação por teclado, `aria-*`)
-- Dados de demonstração repostos todos os dias por uma função agendada
+- Add, edit and delete users (with a confirmation before deleting)
+- Search by name or email
+- Validation in the form and on the server, with a message for each field
+- Unique email (case-insensitive)
+- Loading, empty and connection error states
+- Responsive and accessible layout (keyboard navigation, `aria-*` attributes)
+- Demo data reset every day by a scheduled function
 
 ## API
 
-| Método | Rota | Descrição |
+| Method | Route | Description |
 |---|---|---|
-| `GET` | `/api/usuarios?busca=texto` | Lista (mais recentes primeiro), com pesquisa opcional |
-| `POST` | `/api/usuarios` | Cria `{ nome, email, idade }` |
-| `PUT` | `/api/usuarios/:id` | Atualiza |
-| `DELETE` | `/api/usuarios/:id` | Apaga |
+| `GET` | `/api/usuarios?busca=text` | List (newest first), with optional search |
+| `POST` | `/api/usuarios` | Create `{ nome, email, idade }` (name, email, age) |
+| `PUT` | `/api/usuarios/:id` | Update |
+| `DELETE` | `/api/usuarios/:id` | Delete |
 
-Erros devolvem `{ erro, campos }` com o código HTTP adequado (400, 404, 409).
+Errors return `{ erro, campos }` (error message and per-field messages) with the right HTTP status (400, 404, 409).
 
-## Estrutura
+## Structure
 
 ```
 frontend/                  React + Vite
-  src/App.jsx              lista, pesquisa, edição, confirmação
-  src/Formulario.jsx       formulário com validação
-  src/api.js               cliente da API
+  src/App.jsx              list, search, edit, delete confirmation
+  src/Formulario.jsx       form with validation
+  src/api.js               API client
 netlify/functions/
-  usuarios.mjs             API REST
-  repor-demo.mjs           função agendada (reposição diária)
-netlify/lib/usuarios.mjs   regras de negócio (testáveis sem Netlify)
-tests/api.test.mjs         testes da API (node:test)
+  usuarios.mjs             REST API
+  repor-demo.mjs           scheduled function (daily demo reset)
+netlify/lib/usuarios.mjs   business rules (testable without Netlify)
+tests/api.test.mjs         API tests (node:test)
 ```
 
-## Correr localmente
+## Run locally
 
 ```bash
 npm install
-npm test                      # testes da API
+npm test                      # API tests
 npm i -g netlify-cli
-netlify dev                   # frontend + API em http://localhost:8888
+netlify dev                   # front end + API at http://localhost:8888
 ```
 
-## Publicar no Netlify
+## Deploy to Netlify
 
-Ligar o repositório no Netlify. O `netlify.toml` já define o build (`npm run build`), a pasta publicada (`frontend/dist`) e as funções. O Netlify Blobs não precisa de configuração.
+Connect the repository on Netlify. `netlify.toml` already sets the build command (`npm run build`), the publish folder (`frontend/dist`) and the functions. Netlify Blobs needs no setup.
 
-## Histórico
+## History
 
-A primeira versão foi feita no curso DevClub com Express, Prisma e MongoDB. Esta versão 2 passou a API para serverless e reescreveu o frontend com validação, edição, pesquisa e testes.
+The first version was built during the DevClub course with Express, Prisma and MongoDB. Version 2 moved the API to serverless and rewrote the front end with validation, editing, search and tests.
 
-## Autor
+## Author
 
-**Anderson Frota Gonçalves** · [Portfólio](https://andersonfrota.netlify.app) · [LinkedIn](https://www.linkedin.com/in/andersongfrota)
+**Anderson Frota Gonçalves** · [Portfolio](https://andersonfrota.netlify.app) · [LinkedIn](https://www.linkedin.com/in/andersongfrota)
